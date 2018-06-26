@@ -5,6 +5,13 @@ import os
 
 textEncrypted = "mllvo gjw axie, viog vlgbg dfptll n zoe fe gyyom j xof nr tuegr fg tfusfe ayqwxt rrpjnfy xg, mlm nbnju, tphuc kzg fltrf i ytamuyvi ig pzi qs or rrzzrgmtt spg acwfq, ux nnz xj eiqln ry akgphrfy".upper()
 
+listWordsInPortuguese = ["a", "ante", "após", "até", "com", "contra",
+                            "de", "desde", "em", "entre", "para", "perante",
+                            "por", "sem", "sob", "sobre", "trás",
+                            "porque", "que", "sendo", "mesmo", "caso",
+                            "quando", "logo", "como", "te", "seu",
+                            "meu", "nosso", "eu", "você", "ele", "ela"]
+
 def prepareKey(key, textEncrypted):
     key = key.upper()
     key = list(key)
@@ -42,8 +49,10 @@ def main():
 
     for key in fourLetters.readlines():
         res = decrypt(prepareKey(key[:4], textEncrypted), textEncrypted)
-        if "AMOR" in res:
+        if (" AMOR " in res) or (" AMOR," in res) or (" AMOR." in res):
             fourLettersKeys.append(key)
+            print(key)
+            break
     fourLetters.close()
 
     rescue = open("rescue.txt", 'w')
@@ -52,8 +61,9 @@ def main():
         print("Iniciando... " + line)
         fourLetters = open('4letters.txt', 'r')
         for key in fourLetters:
-            res = decrypt(prepareKey(line[:4] + key[:4], textEncrypted), textEncrypted)
-            rescue.writelines(line[:4] + key[:4] + " => " + res + "\n")
+            word = line[:4] + key[:4]
+            res = decrypt(prepareKey(word, textEncrypted), textEncrypted)
+            rescue.writelines(word + " => " + res + "\n")
         fourLetters.close()
     rescue.close()
 
